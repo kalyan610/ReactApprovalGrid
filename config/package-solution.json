@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "MainForUploadFile-SPFX",
+    "id": "cc9c7a32-9289-4e1b-bcaf-aa1c09ef422f",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false,
+    "skipFeatureDeployment": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    }
+  },
+  "paths": {
+    "zippedPackage": "solution/MainForUploadFile-SPFX.sppkg"
+  }
+}

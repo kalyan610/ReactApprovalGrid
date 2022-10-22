@@ -1,0 +1,13 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.14.0",
+    "libraryName": "react-datatable",
+    "libraryId": "cc9c7a32-9289-4e1b-bcaf-aa1c09ef422f",
+    "packageManager": "npm",
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
