@@ -255,9 +255,15 @@ public saveChange()
 
 console.log(myRecordIDSItems)
 
+  let testdate = new Date(GlobalMyArray[0].ReviewDueDate); 
+
+  testdate.setDate(testdate.getDate()+1);
+
+  let Finaldate=new Date(testdate);
+   console.log('kalyan testing');
 
 this._services.InserttoBulkList(myRecordIDSItems,GlobalMyArray[0].ApproverID,GlobalMyArray[0].ApproverName,GlobalMyArray[0].EmpName,
- GlobalMyArray[0].Title,GlobalMyArray[0].WF_Quarter,GlobalMyArray[0].WF_Year,GlobalMyArray[0].WF_ReviewDueDate,"BulkChange",this.state.Comments,this.props.title).then(function (data)
+ GlobalMyArray[0].Title,GlobalMyArray[0].WF_Quarter,GlobalMyArray[0].WF_Year,Finaldate,"BulkChange",this.state.Comments,this.props.title).then(function (data)
  {
 
  
