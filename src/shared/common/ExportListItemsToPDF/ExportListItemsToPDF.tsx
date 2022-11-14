@@ -31,9 +31,9 @@ export function ExportListItemsToPDF(props: IExportToPDF) {
             content: [
                 {
                     text: title,
-                    fontSize: 16,
+                    fontSize: 10,
                     alignment: 'center',
-                    margin: [0, 0, 0, 15]
+                    margin: [0, 0, 0, 10]
                 },
                 {
                     style: 'tableExample',
@@ -41,7 +41,7 @@ export function ExportListItemsToPDF(props: IExportToPDF) {
                         widths: new Array(columns.length).fill("auto"),
                         headerRows: 1,
                         body: [
-                            columns.map(c=> ({text: c, bold: true})),
+                            columns.map(c=> ({text: c, bold: true,fontSize:5})),
                             ...dataTableRows
                         ]
                     },
@@ -52,9 +52,16 @@ export function ExportListItemsToPDF(props: IExportToPDF) {
                             else
                                 return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
                         }
+
+                                               
                     }
                 }
-            ]
+            ],
+
+            defaultStyle: {
+                fontSize: 5,
+                bold: true
+              }
         };
         pdfMake.createPdf(data).download(`${listName}.pdf`);
     }

@@ -5,13 +5,13 @@ export function pdfCellFormatter(value: any, type: string) {
   switch (type) {
     case 'SP.FieldUrl':
       let { children: text, href: link } = value.props;
-      value = { text, link, color: 'blue' };
+      value = { text, link, color: 'blue'};
       break;
     case 'SP.FieldUser':
       value = value.props.displayName;
       break;
     default:
-      break;
+    break;
   }
   return value;
 }

@@ -363,9 +363,10 @@ public getParam(name)
         fieldName: f.key as string,
         isResizable: true,
         onColumnClick: this.props.sortBy && this.props.sortBy.filter(field => field === f.key).length ? this.handleSorting(f.key as string) : undefined,
-        minWidth: 70,
-        maxWidth: 100,
-        headerClassName: styles.colHeader
+        minWidth: 150,
+        maxWidth: 400,
+        headerClassName: styles.colHeader,
+        isMultiline:true
       }));
       this.setState({ listItems: listItems, columns: dataGridColumns });
     }
@@ -616,7 +617,7 @@ public getParam(name)
                       </Grid>
                       <Grid container justify='flex-end' xs={6}>
                         {enableSearching ?
-                          <TextField
+                          <TextField 
                             onChange={this.handleSearch.bind(this)}
                             placeholder="Search"
                             className={styles.txtSearchBox} />
@@ -624,7 +625,7 @@ public getParam(name)
                       </Grid>
                     </Grid>
                     <div id="generateTable">
-                      <DetailsList
+                      <DetailsList 
                         items={filteredPageItems}
                         columns={columns}
                         selectionMode={this.props.AdminView?SelectionMode.none:SelectionMode.multiple}
