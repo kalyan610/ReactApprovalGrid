@@ -104,7 +104,7 @@ private  Approve()
 
     if(count==myApproverArray.length-1)
     {
-    alert('Approved Succefully');
+    alert('Approved successfully');
     }
     window.location.reload();
     
@@ -150,7 +150,7 @@ private Remove()
 
     if(count==myApproverArray.length-1)
     {
-    alert('Removed Succefully');
+    alert('Removed successfully');
     }
     window.location.reload();
     
@@ -267,7 +267,7 @@ this._services.InserttoBulkList(myRecordIDSItems,GlobalMyArray[0].ApproverID,Glo
  {
 
  
-  alert('Changed Succefully');
+  alert('Changed successfully');
 
   window.location.reload();
       
