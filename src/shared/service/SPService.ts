@@ -51,13 +51,13 @@ export class SPService {
 
     //MyFunctions
 
-    public async UpdateData(itemId,selectedList: string,Status:string,Mydate:Date)
+    public async UpdateData(itemId,selectedList: string,Status:string,Mydate:string)
     {
 
     
     const Item = await sp.web.lists.getById(selectedList).items.getById(itemId).update({
     ApproverStatus:Status,
-    ApproverDateTime:Mydate
+    Test:Mydate
        
       });
     
@@ -147,6 +147,29 @@ export class SPService {
 
     }
 
+    public async InserttoBulkLists(MyTitle:string,MyApproverID:string,MyApproverName:string,MyEmpname:string,
+        MyEmpID:string,MyReqQuarter:string,MyReqYear:string,MyReviewdate:Date,
+        MyReqStatus:string,MyComments:string,MyListName:String)
+    
+        {
+    
+            let Varmyval= await sp.web.lists.getByTitle("BulkApprovalDetatilsList").items.add({
+                ReqIDS:MyTitle,
+                ApproverID:MyApproverID,
+                ApproverName:MyApproverName,
+                EmpName:MyEmpname,
+                EmpId:MyEmpID,
+                MyQuarter:MyReqQuarter,
+                MyYear:MyReqYear,
+                WF_ReviewDueDate:MyReviewdate,
+                MyStatus:MyReqStatus,
+                Comments:MyComments,
+                NameofList:MyListName
+            
+            });
+    
+        }
+
 
     //End
 
@@ -176,7 +199,15 @@ export class SPService {
     }
 
 
-    
+    public async getItemIDs(selectedList: string, data:string,ApproverID:string): Promise<any> {
+       
+        let mystatus="pending";
+        let filtercondition: any = "(Title eq '" + data + "' and ApproverStatus eq '" +mystatus+"' and ApproverID eq '"+ApproverID+"' )";
+        const allItems: any[] = await sp.web.lists.getByTitle(selectedList).items.filter(filtercondition).getAll();
+        return allItems;
+
+
+    }
 
 
 }
