@@ -1,0 +1,90 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.reactDatatable {
+  .dataTableUtilities{
+    margin-bottom: 10px;
+    margin-top: 10px;
+    .downloadButtons > *{
+      margin-right: 10px;
+    }    
+  }
+  .txtSearchBox{
+    min-width: 250px;
+  }
+  .colHeader{
+    font-weight: 600;
+    font-size: 12px;
+    
+  }
+
+  
+  .button {
+    // Our button
+    text-decoration: none;
+    height: 38px;
+  
+    // Primary Button
+    width: 80px;
+    background-color: $ms-color-themePrimary;
+    border-color: $ms-color-themePrimary;
+    color: $ms-color-white;
+  
+    // Basic Button
+    outline: transparent;
+    position: relative;
+    font-family: Cambria;
+    -webkit-font-smoothing: antialiased;
+    font-size: $ms-font-size-m;
+    font-weight: $ms-font-weight-regular;
+    border-width: 0;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 16px;
+  
+    .label {
+      font-weight: $ms-font-weight-semibold;
+      font-size: medium;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 4px;
+      vertical-align: top;
+      display: inline-block;
+    }
+
+   
+  
+   
+  }
+  
+  
+
+}
+
+.myStyles
+  {
+
+
+   margin-top: -30px;
+   margin-bottom: 10px;
+
+  .labelstyles
+   {
+  width: 150px;
+
+   }
+  
+  }
+
+  .myStylesSpaces
+  {
+   
+   margin-bottom: 10px;
+
+  .labelstyles
+   {
+  width: 150px;
+
+   }
+  
+  }
