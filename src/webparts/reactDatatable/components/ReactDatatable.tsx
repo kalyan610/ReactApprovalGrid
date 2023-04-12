@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styles from './ReactDatatable.module.scss';
+
 import { IReactDatatableProps } from './IReactDatatableProps';
 import { IReactDatatableState } from './IReactDatatableState';
 import * as strings from 'ReactDatatableWebPartStrings';
@@ -30,6 +31,8 @@ const stackButtonStyles: Partial<IStackStyles> = { root: { Width: 20 } };
 let GlobalMyArray=[];
 
 let GlobalBulkIDs=[];
+
+let AllListItems=[];
 
 export default class ReactDatatable extends React.Component<IReactDatatableProps, IReactDatatableState> {
 
@@ -84,7 +87,8 @@ private  Approve()
   {
 
   const current = new Date();
- 
+
+
  console.log(this._selection.getSelection());
 
  let myApproverArray=[];
@@ -98,8 +102,8 @@ private  Approve()
 
  for(let count=0;count<myApproverArray.length;count++)
  {
-  
-  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Approved",current).then(function (data)
+
+  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Approved","").then(function (data)
   {
 
     if(count==myApproverArray.length-1)
@@ -145,7 +149,7 @@ private Remove()
  for(let count=0;count<myApproverArray.length;count++)
  {
   
-  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Removed",current).then(function (data)
+  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Removed","").then(function (data)
   {
 
     if(count==myApproverArray.length-1)
@@ -170,6 +174,8 @@ alert('Please select atleast one record to approve');
 
 public checkduplicateempvalues(arr)
 				{
+
+          
 				
 				var xapp=arr[0];
 
@@ -223,6 +229,7 @@ if(myApproverArray.length)
 public saveChange()
 {
 
+  
   //Update record to in Main List
   
   let myRecordIDS="";
@@ -238,10 +245,10 @@ public saveChange()
   myRecordIDS+=GlobalMyArray[count].id+",";
 
 
-  this._services.updateMainList(GlobalMyArray[count].id,this.props.list,"BulkChange",GlobalMyArray[count].ApproverID,GlobalMyArray[count].ApproverName,this.state.Comments).then(function (data)
-  {
+  // this._services.updateMainList(GlobalMyArray[count].id,"SAR_PeopleSoftFinance","BulkChange",GlobalMyArray[count].ApproverID,GlobalMyArray[count].ApproverName,this.state.Comments).then(function (data)
+  // {
        
-  });
+  // });
 
   //this._services.updateMainList(GlobalMyArray[count].id,this.props.list,"BulkChange",GlobalMyArray[count].ApproverID,GlobalMyArray[count].ApproverName,this.state.Comments);
   
@@ -292,6 +299,68 @@ alert('Please select atleast one record to approve');
 
 }
 
+public async savechangetest()
+{
+
+var FinalArray=[];
+
+let myRecordIDSItems="";
+
+let myIDSarray=[];
+
+let MyIdElements;
+
+FinalArray=this.removewithfilter(GlobalMyArray)
+
+//let listItemIDS = await this._services.getItemIDs(FinalArray[0]['Title']);
+let reqApproverIDSIDs=this.getParam("SID");
+
+let listItemIDS = await this._services.getItemIDs("SAR_PeopleSoftFinance",FinalArray[0]['Title'],reqApproverIDSIDs);
+
+
+
+let testdate = new Date(GlobalMyArray[0].ReviewDueDate); 
+
+testdate.setDate(testdate.getDate()+1);
+
+let Finaldate=new Date(testdate);
+
+ 
+
+for(var count=0;count<listItemIDS.length;count++)
+{
+
+
+  myRecordIDSItems+=listItemIDS[count].ID+",";
+
+ await this._services.updateMainList(listItemIDS[count].ID,this.props.list,"BulkChange",listItemIDS[count].ApproverID,listItemIDS[count].ApproverName,this.state.Comments).then(function (data)
+  {
+       
+ });
+
+//this._services.updateMainList(listItemIDS[count].ID,"SAR_PeopleSoftFinance","BulkChange",listItemIDS[count].ApproverID,listItemIDS[count].ApproverName,this.state.Comments);
+
+}
+//Bulk Save
+
+let FinalmyRecordIDSItems =myRecordIDSItems.slice(0, -1);
+
+this._services.InserttoBulkLists(FinalmyRecordIDSItems,GlobalMyArray[0].ApproverID,GlobalMyArray[0].ApproverName,GlobalMyArray[0].EmpName,
+  GlobalMyArray[0].Title,GlobalMyArray[0].WF_Quarter,GlobalMyArray[0].WF_Year,Finaldate,"BulkChange",this.state.Comments,this.props.title).then(function (data)
+{
+
+alert('Changed successfully');
+
+window.location.reload();
+    
+});
+
+
+this.setState({openbox: true });
+
+//END
+
+}
 
 
 public closeDialog() {  
@@ -300,6 +369,8 @@ public closeDialog() {
 
 
 public loadItems() {  
+
+  alert('Welcome4');
    let reqApproverIDSID=this.getParam("SID");
    this.setState({myApproverId: reqApproverIDSID});
 
@@ -343,12 +414,14 @@ public getParam(name)
       if(this.props.AdminView)
       {
         listItems = await this._services.getListItems(this.props.list, fields);
+
+        AllListItems=listItems;
       }
       else
       {
        
      listItems=await this._services.getListItemsBasedonApproverID(this.props.list, fields,reqApproverIDSID);
-      
+     AllListItems=listItems;
       }
       /** Format list items for data grid */
       listItems = listItems && listItems.map(item => ({
@@ -564,6 +637,18 @@ public getParam(name)
 
   }
 
+  public removewithfilter(arr) {
+    let outputArray = arr.filter(function(v, i, self)
+    {
+         
+        // It returns the index of the first
+        // instance of each value
+        return i == self.indexOf(v);
+    });
+     
+    return outputArray;
+}
+
 
 
   
@@ -707,7 +792,7 @@ public getParam(name)
 <br></br>
 <Stack horizontal tokens={sectionStackTokens} className={styles.myStylesSpaces}>
 <StackItem>
-<PrimaryButton name='TestButton' onClick={this.saveChange.bind(this)}>Save</PrimaryButton>
+<PrimaryButton name='TestButton' onClick={this.savechangetest.bind(this)}>Save</PrimaryButton>
   </StackItem>
   <StackItem>
   <PrimaryButton name='TestButton' onClick={this.closeDialog.bind(this)}>Cancel</PrimaryButton>
