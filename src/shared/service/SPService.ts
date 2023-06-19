@@ -51,13 +51,13 @@ export class SPService {
 
     //MyFunctions
 
-    public async UpdateData(itemId,selectedList: string,Status:string,Mydate:string)
+    public async UpdateData(itemId,selectedList: string,Status:string)
     {
 
     
     const Item = await sp.web.lists.getById(selectedList).items.getById(itemId).update({
-    ApproverStatus:Status,
-    Test:Mydate
+    ApproverStatus:Status
+    
        
       });
     
@@ -201,6 +201,7 @@ export class SPService {
 
     public async getItemIDs(selectedList: string, data:string,ApproverID:string): Promise<any> {
        
+        //Last Code Change
         let mystatus="pending";
         let filtercondition: any = "(Title eq '" + data + "' and ApproverStatus eq '" +mystatus+"' and ApproverID eq '"+ApproverID+"' )";
         const allItems: any[] = await sp.web.lists.getByTitle(selectedList).items.filter(filtercondition).getAll();
@@ -208,6 +209,17 @@ export class SPService {
 
 
     }
+
+    public async getItemIDs1(selectedList: string, data:string,ApproverID:string): Promise<any> {
+       
+        let mystatus="pending";
+        let filtercondition: any = "(Title eq '" + data + "' and ApproverStatus eq '" +mystatus+"' and ApproverID eq '"+ApproverID+"' )";
+        const allItems: any[] = await sp.web.lists.getById(selectedList).items.filter(filtercondition).getAll();
+        return allItems;
+
+
+    }
+
 
 
 }
