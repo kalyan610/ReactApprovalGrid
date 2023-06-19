@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styles from './ReactDatatable.module.scss';
 
+
 import { IReactDatatableProps } from './IReactDatatableProps';
 import { IReactDatatableState } from './IReactDatatableState';
 import * as strings from 'ReactDatatableWebPartStrings';
@@ -86,8 +87,11 @@ export default class ReactDatatable extends React.Component<IReactDatatableProps
 private  Approve()
   {
 
-  const current = new Date();
+  // const current = new Date();
 
+  // let testdate = new Date(current);
+  // testdate.setDate(testdate.getDate()-1);
+  // let x=testdate.toDateString();
 
  console.log(this._selection.getSelection());
 
@@ -103,7 +107,7 @@ private  Approve()
  for(let count=0;count<myApproverArray.length;count++)
  {
 
-  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Approved","").then(function (data)
+  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Approved").then(function (data)
   {
 
     if(count==myApproverArray.length-1)
@@ -133,6 +137,8 @@ private Remove()
 {
 
   const current = new Date();
+
+
   
   console.log(this._selection.getSelection());
 
@@ -149,7 +155,7 @@ private Remove()
  for(let count=0;count<myApproverArray.length;count++)
  {
   
-  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Removed","").then(function (data)
+  this._services.UpdateData(myApproverArray[count].id,this.props.list,"Removed").then(function (data)
   {
 
     if(count==myApproverArray.length-1)
@@ -315,7 +321,9 @@ FinalArray=this.removewithfilter(GlobalMyArray)
 //let listItemIDS = await this._services.getItemIDs(FinalArray[0]['Title']);
 let reqApproverIDSIDs=this.getParam("SID");
 
-let listItemIDS = await this._services.getItemIDs("SAR_PeopleSoftFinance",FinalArray[0]['Title'],reqApproverIDSIDs);
+
+
+let listItemIDS = await this._services.getItemIDs1(this.props.list,FinalArray[0]['Title'],reqApproverIDSIDs);
 
 
 
@@ -370,7 +378,7 @@ public closeDialog() {
 
 public loadItems() {  
 
-  alert('Welcome4');
+   
    let reqApproverIDSID=this.getParam("SID");
    this.setState({myApproverId: reqApproverIDSID});
 
