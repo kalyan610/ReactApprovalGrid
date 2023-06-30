@@ -220,6 +220,30 @@ export class SPService {
 
     }
 
+    public async getCurrentUser(): Promise<any> {
+        try {
+            return await sp.web.currentUser.get().then(result => {
+                return result;
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    public async getItemByEmail(ItemEmail: any): Promise<any> {
+        try {
+    
+    
+            let filtercondition: any = "(EmailID eq '" + ItemEmail + "')";
+            const selectedList = 'PeopleSoft';
+            const Item: any[] = await sp.web.lists.getByTitle(selectedList).items.select('EMPID')
+            .filter(filtercondition).get();
+            return Item[0].EMPID;
+        } catch (error) {
+            console.log(error);
+        }
+      }
+
 
 
 }

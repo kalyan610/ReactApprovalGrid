@@ -79,7 +79,10 @@ export default class ReactDatatable extends React.Component<IReactDatatableProps
   }
 
   public componentDidMount() {
+
+   
     this.getSelectedListItems();
+    this.getloginuser();
   }
 
   //My functions
@@ -384,6 +387,27 @@ public loadItems() {
 
   }
 
+public async getloginuser()
+{
+
+  
+  let currentuser= await this._services.getCurrentUser();
+  console.log(currentuser);
+  let reqApproverID1=await this._services.getItemByEmail(currentuser.Email)
+  let reqApproverIDSID1=this.getParam("SID");
+
+  if(reqApproverID1!=reqApproverIDSID1)
+  {
+   alert('you are not valid user');
+   window.location.replace("https://capcoinc.sharepoint.com/sites/SecurityAccessReview/SitePages/NoAcess.aspx");
+
+  }
+
+ 
+  
+
+}
+
 public getParam(name)
 {
  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
@@ -403,6 +427,7 @@ public getParam(name)
   }
 
   public componentDidUpdate(prevProps: IReactDatatableProps) {
+    
     if (prevProps.list !== this.props.list) {
       this.props.onChangeProperty("list");
     }
@@ -421,13 +446,15 @@ public getParam(name)
       //let listItems = await this._services.getListItems(this.props.list, fields);
       if(this.props.AdminView)
       {
+        
         listItems = await this._services.getListItems(this.props.list, fields);
 
         AllListItems=listItems;
       }
       else
       {
-       
+
+        
      listItems=await this._services.getListItemsBasedonApproverID(this.props.list, fields,reqApproverIDSID);
      AllListItems=listItems;
       }
@@ -668,6 +695,8 @@ public getParam(name)
     console.log('kalyan');
     console.log(fields);
     console.log(this._selection.getSelection());
+
+    
     
     let filteredPageItems = enablePagination ? this.paginateFn(filteredItems) : filteredItems;
 
@@ -769,6 +798,7 @@ public getParam(name)
     <PrimaryButton name='TestButton' onClick={this.changerecord.bind(this)} >Change Approver</PrimaryButton>
     </td>
   </tr>
+  
 </table>
 
 <Dialog hidden={this.state.openbox}>
