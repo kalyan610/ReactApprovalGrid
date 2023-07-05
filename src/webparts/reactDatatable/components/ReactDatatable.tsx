@@ -82,7 +82,19 @@ export default class ReactDatatable extends React.Component<IReactDatatableProps
 
    
     this.getSelectedListItems();
+
+    // let { ToggleHide } = this.props;
+
+    // if(!ToggleHide)
+    // {
+
+    //   this.getloginuser();
+    // }
+
+    if(this.props.AdminView==false)
+    {
     this.getloginuser();
+    }
   }
 
   //My functions
