@@ -244,6 +244,113 @@ export class SPService {
         }
       }
 
+      public async GetReqCountries(MyLoginUser:String):Promise<any>
+      {
+  
+  
+      let filtercondition: any = " (Reviewer eq '" + MyLoginUser + "')" ;
+   
+       return await sp.web.lists.getByTitle("ReviewerswithBusinessUnit").items.select('Title','ID').expand().filter(filtercondition).get().then(function (data:any) {
+   
+       return data;
+   
+   
+       });
+   
+   
+      }
+  
+      public async GetByCountryAllDetails(SelContryName: string):Promise<any>
+      {
+      
+       let filtercondition: any = "(BusinessUnit eq '" + SelContryName + "')";
+      
+       return await  sp.web.lists.getByTitle("GiftRegistrationDetails").items.select("*").filter(filtercondition).get().then(function (data) {
+      
+       return data;
+      
+       });
+      
+      }
+
+
+      public async getListItemsCountries(selectedList: string, selectedFields: any[]) {
+        try {
+
+         let currentuserget= await sp.web.currentUser.get().then(result => {
+            return result;
+        });
+
+
+        let filtercondition: any = " (Reviewer eq '" + currentuserget.Email + "')" ;
+   
+        let ReqCountries= await sp.web.lists.getByTitle("ReviewerswithBusinessUnit").items.select('Title','ID').expand().filter(filtercondition).get().then(function (data:any) {
+    
+    
+        return data;
+    
+    
+        });
+
+
+        let arrcountry = ReqCountries[0].Title.split(',')
+
+        let strconditioncountry="";
+
+        for(var count=0;count<arrcountry.length;count++)
+        {
+
+          if(count==0)
+          {            
+            strconditioncountry+="BusinessUnit eq '"+arrcountry[count].trim()+"'";
+          }
+          else
+          {
+            strconditioncountry+=" or BusinessUnit eq '"+arrcountry[count].trim()+"'";
+          }
+
+        }
+
+            let selectQuery: any[] = ['Id'];
+            let expandQuery: any[] = [];
+            let listItems = [];
+            let items: any;
+            for (var i = 0; i < selectedFields.length; i++) {
+                switch (selectedFields[i].fieldType) {
+                    case 'SP.FieldUser':
+                        selectQuery.push(`${selectedFields[i].key}/Title,${selectedFields[i].key}/EMail,${selectedFields[i].key}/Name`);
+                        expandQuery.push(selectedFields[i].key);
+                        break;
+                    case 'SP.FieldLookup':
+                        selectQuery.push(`${selectedFields[i].key}/Title`);
+                        expandQuery.push(selectedFields[i].key);
+                        break;
+                    case 'SP.Field':
+                        selectQuery.push('Attachments,AttachmentFiles');
+                        expandQuery.push('AttachmentFiles');
+                        break;
+                    default:
+                        selectQuery.push(selectedFields[i].key);
+                        break;
+                }
+            }
+            items = await sp.web.lists.getById(selectedList).items
+                .select(selectQuery.join())
+                .filter(strconditioncountry)
+                .expand(expandQuery.join())
+                .top(4999)
+                .getPaged();
+            listItems = items.results;
+            while (items.hasNext) {
+                items = await items.getNext();
+                listItems = [...listItems, ...items.results];
+            }
+            return listItems;
+        } catch (err) {
+            Promise.reject(err);
+        }
+    }
+
 
 
 }

@@ -22,5 +22,6 @@ export interface IReactDatatableProps {
   fieldOrder: Array<any>;
   ToggleHide:boolean;
   AdminView:boolean;
+  GiftRegistryView:boolean;
   
 }

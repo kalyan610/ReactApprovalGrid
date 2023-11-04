@@ -35,6 +35,7 @@ export interface IReactDatatableWebPartProps {
   fieldOrder: Array<any>;
   ToggleHide:boolean;
   AdminView:boolean;
+GiftRegistryView:boolean;
 }
 
 export default class ReactDatatableWebPart extends BaseClientSideWebPart<IReactDatatableWebPartProps> {
@@ -87,7 +88,8 @@ export default class ReactDatatableWebPart extends BaseClientSideWebPart<IReactD
         fieldOrder: this.properties.fieldOrder,
         ToggleHide:this.properties.ToggleHide,
         onChangeProperty: this.onChangeProperty,
-        AdminView:this.properties.AdminView
+        AdminView:this.properties.AdminView,
+        GiftRegistryView:this.properties.GiftRegistryView
       }
     );
 
@@ -208,6 +210,11 @@ export default class ReactDatatableWebPart extends BaseClientSideWebPart<IReactD
                 }),
                 PropertyPaneToggle('AdminView', {
                   label: 'AdminView',
+                  checked: false
+                }),
+
+                PropertyPaneToggle('GiftRegistryView', {
+                  label: 'GiftRegistryView',
                   checked: false
                 }),
 

@@ -35,6 +35,10 @@ let GlobalBulkIDs=[];
 
 let AllListItems=[];
 
+let ReqmyCountryItems=[];
+
+let CountryItems: any = [];
+
 export default class ReactDatatable extends React.Component<IReactDatatableProps, IReactDatatableState> {
 
   private _services: SPService = null;
@@ -60,28 +64,139 @@ export default class ReactDatatable extends React.Component<IReactDatatableProps
       EmpID:"",
       EmpName:"",
       SelectedMyArary:[],
-      Comments:""
+      Comments:"",
+      stateReqCountry:[],
+      stateUserEmail:""
+      
+      
             
     };
 
         
     
-
+    //this.gifrestryloginData();
+    
     this.loadItems();
     this._services = new SPService(this.props.context);
+    //this.getUserEmail();
+    //this.getCountry();
     this._onConfigure = this._onConfigure.bind(this);
     this.getSelectedListItems = this.getSelectedListItems.bind(this);
+
+    // if(this.props.GiftRegistryView)
+    // {
+    //   //let currentuser= await this._services.getCurrentUser();
+    //   this.gifrestryloginData();
+
+    // }
+
     this._selection = new Selection({ });
     
-      
+    
     
 
   }
 
+
+  // public async getUserEmail()
+  // {
+
+  //   let currentuser= await this._services.getCurrentUser();
+  //   this.setState({stateUserEmail:currentuser});
+  // }
+
+  // public async getCountry()
+  // {
+  //   var data = await this._services.GetReqCountries(this.state.stateUserEmail);
+
+  //   this.setState({stateReqCountry:data});
+  // }
+  
+
+  public async gifrestryloginData()
+  {
+
+    if(this.props.GiftRegistryView==true)
+    {
+
+      let currentuser= await this._services.getCurrentUser();
+     
+      //alert(currentuser.Email);
+
+      this.GetCountries1(currentuser.Email);
+
+
+    }
+  }
+
+  public async GetCountries1(UserreqEmail:string)
+  {
+
+  var data = await this._services.GetReqCountries(UserreqEmail);
+
+  var AllCountries: any = [];
+
+  var myCountryLocal: any = [];
+
+  let countrylevel = data[0].Title;
+
+  
+  let arr = countrylevel.split(',')
+
+  for ( var count=0; count<arr.length;count++) {
+    AllCountries.push({ key: arr[count], text: arr[count] });
+  }
+
+  console.log(AllCountries);
+
+  AllCountries.map((item:any) => {
+    let Itemexsits = false;
+
+    if (myCountryLocal != null) {
+      if (myCountryLocal && myCountryLocal.length > 0) {
+
+        myCountryLocal.map((ditem:any) => {
+          if (ditem.key === item.key) 
+          {
+
+            Itemexsits = true;
+          }
+
+        });
+      }
+
+      if (!Itemexsits) {
+
+        myCountryLocal.push({ key: item.key, text: item.text });
+      }
+
+    }
+  });
+
+
+  CountryItems= myCountryLocal;
+
+  for(count=0;count<CountryItems.length;count++)
+  {
+
+    ReqmyCountryItems = await this._services.GetByCountryAllDetails(CountryItems[count].text);
+
+    this.setState({listItems:ReqmyCountryItems});
+  }
+
+  
+
+  
+  }
+
+  
+
   public componentDidMount() {
 
-   
+
     this.getSelectedListItems();
+
+    
 
     // let { ToggleHide } = this.props;
 
@@ -95,6 +210,20 @@ export default class ReactDatatable extends React.Component<IReactDatatableProps
     {
     this.getloginuser();
     }
+
+    //kalyan
+
+    // if(this.props.GiftRegistryView==true)
+    // {
+
+    //   this.gifrestryloginData();
+    // }
+
+   //Commented
+
+    
+
+
   }
 
   //My functions
@@ -456,13 +585,24 @@ public getParam(name)
     if (fields.length) {
 
       //let listItems = await this._services.getListItems(this.props.list, fields);
-      if(this.props.AdminView)
+      if(this.props.AdminView && this.props.GiftRegistryView==false)
       {
         
         listItems = await this._services.getListItems(this.props.list, fields);
 
         AllListItems=listItems;
       }
+
+    else if(this.props.AdminView && this.props.GiftRegistryView==true)
+      {
+        
+        listItems = await this._services.getListItemsCountries(this.props.list, fields);
+
+        AllListItems=listItems;
+      
+      }
+      
+    
       else
       {
 
@@ -605,7 +745,7 @@ public getParam(name)
     return listItems1;
   }
 
-  public filterListItems() {
+  public  filterListItems() {
     let { searchBy, enableSorting,ToggleHide } = this.props;
     let { sortingFields, listItems, searchText } = this.state;
     if (searchText) {
@@ -623,9 +763,16 @@ public getParam(name)
     {
       listItems = this.getTogledata(listItems);
 
-
-
     }
+
+    //kalyan Commented
+
+    
+    // //end
+
+
+
+
     return listItems;
   }
 
@@ -700,21 +847,26 @@ public getParam(name)
 
   
   public render(): React.ReactElement<IReactDatatableProps> {
-    let filteredItems = this.filterListItems();
+    let filteredItems =  this.filterListItems();
     let { list, fields, enableDownloadAsCsv, enableDownloadAsPdf, enablePagination, displayMode, enableSearching, title, evenRowColor, oddRowColor } = this.props;
     let { columns } = this.state;
     console.log(columns);
     console.log('kalyan');
     console.log(fields);
     console.log(this._selection.getSelection());
+    console.log(filteredItems);
 
     
     
     let filteredPageItems = enablePagination ? this.paginateFn(filteredItems) : filteredItems;
 
     return (
-      <div className={styles.reactDatatable}>
+
+     <div className={styles.reactDatatable}>
+
         {
+
+
           this.props.list == "" || this.props.list == undefined ?
             <Placeholder
               iconName='Edit'

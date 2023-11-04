@@ -19,5 +19,7 @@ export interface IReactDatatableState {
   EmpID:string;
   EmpName:string;
   SelectedMyArary:[],
-  Comments:string
+  Comments:string,
+  stateReqCountry:[],
+  stateUserEmail:string
 }
