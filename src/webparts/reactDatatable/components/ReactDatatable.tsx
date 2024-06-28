@@ -206,7 +206,7 @@ export default class ReactDatatable extends React.Component<IReactDatatableProps
     //   this.getloginuser();
     // }
 
-    if(this.props.AdminView==false)
+    if(this.props.AdminView==false && this.props.context.pageContext.web.title!="Solution Partnership Database Submission")
     {
     this.getloginuser();
     }
